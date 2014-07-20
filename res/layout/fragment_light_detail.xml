@@ -1,0 +1,54 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:columnCount="2" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_column="0"
+        android:layout_gravity="left|top"
+        android:layout_row="0"
+        android:text="Label:"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/light_label"
+        android:layout_column="1"
+        android:layout_gravity="left|top"
+        android:layout_row="0"
+        android:text=""
+        android:textSize="20sp" />
+   
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_column="0"
+        android:layout_gravity="left|top"
+        android:layout_row="1"
+        android:text="Status:"
+        android:textSize="20sp" />
+    
+    <TextView
+        android:id="@+id/light_status"
+        android:layout_column="1"
+        android:layout_gravity="left|top"
+        android:layout_row="1"
+        android:text=""
+        android:textSize="20sp" />  
+    
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_column="0"
+        android:layout_gravity="left|top"
+        android:layout_row="2"
+        android:text="Colour:"
+        android:textSize="20sp" />
+    
+    <TextView
+        android:id="@+id/light_colour"
+        android:layout_column="1"
+        android:layout_gravity="left|top"
+        android:layout_row="2"
+        android:text=""
+        android:textSize="20sp" />  
+    
+</GridLayout>

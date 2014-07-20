@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LIFX Switch</string>
+    <string name="title_light_detail">Light Detail</string>
+
+</resources>
