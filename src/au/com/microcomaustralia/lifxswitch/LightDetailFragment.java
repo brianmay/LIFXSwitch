@@ -12,7 +12,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 /**
  * A fragment representing a single Light detail screen. This fragment is either
@@ -58,6 +61,9 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		rootView = inflater.inflate(R.layout.fragment_light_detail,
 				container, false);
 
+		ToggleButton button = (ToggleButton) rootView.findViewById(R.id.button);
+		button.setOnCheckedChangeListener(new ButtonListener());
+
 		// Show the dummy content as text in a TextView.
 //		if (light != null) {
 //			TextView text;
@@ -73,6 +79,20 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 //		}
 
 		return rootView;
+	}
+
+	class ButtonListener implements OnCheckedChangeListener {
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView,
+				boolean isChecked) {
+			if (isChecked) {
+				light.setPowerState(LFXPowerState.ON);
+			} else {
+				light.setPowerState(LFXPowerState.OFF);
+			}
+			
+		}
 	}
 
 	@Override
@@ -92,12 +112,14 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 	@Override
 	public void lightDidChangePowerState( LFXLight light, LFXPowerState powerState)
 	{
-		TextView text= (TextView) rootView.findViewById(R.id.light_status);
+		TextView text = (TextView) rootView.findViewById(R.id.light_status);
 		if (light.getPowerState() == LFXPowerState.ON) {
 			text.setText("On");
 		} else {
 			text.setText("Off");
 		}
+		ToggleButton button = (ToggleButton) rootView.findViewById(R.id.button);
+		button.setChecked(light.getPowerState() == LFXPowerState.ON);
 	}
 	
 }
