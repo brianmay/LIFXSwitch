@@ -37,8 +37,8 @@ public class LightDetailActivity extends ActionBarActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putString(LightDetailFragment.ARG_LIGHT_LABEL, getIntent()
-					.getStringExtra(LightDetailFragment.ARG_LIGHT_LABEL));
+			arguments.putString(LightDetailFragment.ARG_LIGHT_ID, getIntent()
+					.getStringExtra(LightDetailFragment.ARG_LIGHT_ID));
 			LightDetailFragment fragment = new LightDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()

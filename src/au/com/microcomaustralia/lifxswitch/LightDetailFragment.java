@@ -31,7 +31,7 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
 	 */
-	public static final String ARG_LIGHT_LABEL = "light_label";
+	public static final String ARG_LIGHT_ID = "light_id";
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,13 +44,13 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (getArguments().containsKey(ARG_LIGHT_LABEL)) {
-			String label = getArguments().getString(ARG_LIGHT_LABEL);
+		if (getArguments().containsKey(ARG_LIGHT_ID)) {
+			String id = getArguments().getString(ARG_LIGHT_ID);
 			
 			Context appContext = getActivity().getApplicationContext();
 			networkContext = LFXClient.getSharedInstance(appContext).getLocalNetworkContext();
 			networkContext.connect();
-			light = networkContext.getAllLightsCollection().getFirstLightForLabel(label);
+			light = networkContext.getAllLightsCollection().getLightWithDeviceID(id);
 			light.addLightListener(this);
 		}
 	}

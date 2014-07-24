@@ -61,7 +61,7 @@ public class LightListActivity extends FragmentActivity implements
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putString(LightDetailFragment.ARG_LIGHT_LABEL, light.getLabel());
+			arguments.putString(LightDetailFragment.ARG_LIGHT_ID, light.getDeviceID());
 			LightDetailFragment fragment = new LightDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
@@ -71,7 +71,7 @@ public class LightListActivity extends FragmentActivity implements
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, LightDetailActivity.class);
-			detailIntent.putExtra(LightDetailFragment.ARG_LIGHT_LABEL, light.getLabel());
+			detailIntent.putExtra(LightDetailFragment.ARG_LIGHT_ID, light.getDeviceID());
 			startActivity(detailIntent);
 		}
 	}
