@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -26,6 +28,7 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 	private View rootView;
 	private LFXLight light;
 	private LFXNetworkContext networkContext;
+	private LFXHSBKColor colour;
 
 	/**
 	 * The fragment argument representing the item ID that this fragment
@@ -64,6 +67,12 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		ToggleButton button = (ToggleButton) rootView.findViewById(R.id.button);
 		button.setOnCheckedChangeListener(new ButtonListener());
 
+		SeekBar seekbar;
+		seekbar = (SeekBar) rootView.findViewById(R.id.brightness);
+		seekbar.setOnSeekBarChangeListener(new BrightnessListener());
+		seekbar = (SeekBar) rootView.findViewById(R.id.temperature);
+		seekbar.setOnSeekBarChangeListener(new TemperatureListener());
+
 		// Show the dummy content as text in a TextView.
 //		if (light != null) {
 //			TextView text;
@@ -95,6 +104,60 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		}
 	}
 
+	class BrightnessListener implements OnSeekBarChangeListener {
+
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			colour = LFXHSBKColor.getColor(
+					colour.getHue(),
+					colour.getSaturation(),
+					((float)progress)/100,
+					colour.getKelvin());
+			light.setColor(colour);		
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStopTrackingTouch(SeekBar arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+
+	class TemperatureListener implements OnSeekBarChangeListener {
+
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			colour = LFXHSBKColor.getColor(
+					colour.getHue(),
+					colour.getSaturation(),
+					colour.getBrightness(),
+					progress);
+			light.setColor(colour);					
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+
 	@Override
 	public void lightDidChangeLabel( LFXLight light, String label)
 	{
@@ -105,8 +168,21 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 	@Override
 	public void lightDidChangeColor( LFXLight light, LFXHSBKColor color)
 	{
+		colour = color;
+		
 		TextView text= (TextView) rootView.findViewById(R.id.light_colour);
-		text.setText(color.toString());
+		text.setText(
+			String.valueOf(color.getHue()) + "\n" +
+			String.valueOf(color.getSaturation()) + "\n" +
+			String.valueOf(color.getBrightness()) + "\n" +
+			String.valueOf(color.getKelvin())
+		);
+		
+		SeekBar seekbar;
+		seekbar = (SeekBar) rootView.findViewById(R.id.brightness);
+		seekbar.setProgress((int)(color.getBrightness()*100));
+		seekbar = (SeekBar) rootView.findViewById(R.id.temperature);
+		seekbar.setProgress(color.getKelvin());
 	}
 
 	@Override
