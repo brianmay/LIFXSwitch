@@ -47,15 +47,13 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (getArguments().containsKey(ARG_LIGHT_ID)) {
-			String id = getArguments().getString(ARG_LIGHT_ID);
+		String id = getArguments().getString(ARG_LIGHT_ID);
 			
-			Context appContext = getActivity().getApplicationContext();
-			networkContext = LFXClient.getSharedInstance(appContext).getLocalNetworkContext();
-			networkContext.connect();
-			light = networkContext.getAllLightsCollection().getLightWithDeviceID(id);
-			light.addLightListener(this);
-		}
+		Context appContext = getActivity().getApplicationContext();
+		networkContext = LFXClient.getSharedInstance(appContext).getLocalNetworkContext();
+		networkContext.connect();
+		light = networkContext.getAllLightsCollection().getLightWithDeviceID(id);
+		light.addLightListener(this);
 	}
 
 	@Override
@@ -73,19 +71,14 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		seekbar = (SeekBar) rootView.findViewById(R.id.temperature);
 		seekbar.setOnSeekBarChangeListener(new TemperatureListener());
 
-		// Show the dummy content as text in a TextView.
-//		if (light != null) {
-//			TextView text;
-//			
-//			text= (TextView) rootView.findViewById(R.id.light_label);
-//			text.setText(light.getLabel());
-//			text = (TextView) rootView.findViewById(R.id.light_status);
-//			if (light.getPowerState() == LFXPowerState.ON) {
-//				text.setText("On");
-//			} else {
-//				text.setText("Off");
-//			}
-//		}
+		colour = light.getColor();
+		lightDidChangeColor(light, colour);
+		
+		String label = light.getLabel();
+		lightDidChangeLabel(light, label);
+		
+		LFXPowerState powerState = light.getPowerState();
+		lightDidChangePowerState(light, powerState);
 
 		return rootView;
 	}
@@ -109,6 +102,7 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
+			if (colour == null) return;
 			colour = LFXHSBKColor.getColor(
 					colour.getHue(),
 					colour.getSaturation(),
@@ -136,6 +130,7 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
+			if (colour == null) return;
 			colour = LFXHSBKColor.getColor(
 					colour.getHue(),
 					colour.getSaturation(),
