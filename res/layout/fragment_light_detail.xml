@@ -67,13 +67,12 @@
         android:text="Brightness:"
         android:textSize="20sp" />
     
-    <SeekBar
+    <NumberPicker
         android:id="@+id/brightness"
         android:layout_width="200dp"
         android:layout_column="1"
         android:layout_gravity="left|top"
-        android:layout_row="4"
-        android:max="100" />
+        android:layout_row="4" />
     
     <TextView
         android:id="@+id/textView5"
@@ -83,12 +82,11 @@
         android:text="Temperature:"
         android:textSize="20sp" />
     
-    <SeekBar
+    <NumberPicker
         android:id="@+id/temperature"
         android:layout_width="200dp"
         android:layout_column="1"
         android:layout_gravity="left|top"
-        android:layout_row="5"
-        android:max="10000" />
+        android:layout_row="5" />
     
 </GridLayout>

@@ -14,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.NumberPicker;
+import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -30,6 +30,10 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 	private LFXNetworkContext networkContext;
 	private LFXHSBKColor colour;
 
+	private static int tempMax = 10000;
+	private static int tempMin = 0;
+	private static int tempStep = 100;
+	
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -65,12 +69,24 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		ToggleButton button = (ToggleButton) rootView.findViewById(R.id.button);
 		button.setOnCheckedChangeListener(new ButtonListener());
 
-		SeekBar seekbar;
-		seekbar = (SeekBar) rootView.findViewById(R.id.brightness);
-		seekbar.setOnSeekBarChangeListener(new BrightnessListener());
-		seekbar = (SeekBar) rootView.findViewById(R.id.temperature);
-		seekbar.setOnSeekBarChangeListener(new TemperatureListener());
+		NumberPicker numberPicker;
+		numberPicker = (NumberPicker) rootView.findViewById(R.id.brightness);
+		numberPicker.setOnValueChangedListener(new BrightnessListener());
+        numberPicker.setMaxValue(100);
+        numberPicker.setMinValue(0);
 
+        numberPicker = (NumberPicker) rootView.findViewById(R.id.temperature);
+		numberPicker.setOnValueChangedListener(new TemperatureListener());
+        
+        String[] stringArray = new String[(tempMax-tempMin)/tempStep];
+        for(int i=0; i<stringArray.length; i++){
+        	int temp = i*tempStep + tempMin;
+            stringArray[i] = Integer.toString(temp);
+        }
+        numberPicker.setMaxValue(stringArray.length-1);
+        numberPicker.setMinValue(0);
+        numberPicker.setDisplayedValues(stringArray);
+        
 		colour = light.getColor();
 		lightDidChangeColor(light, colour);
 		
@@ -97,65 +113,38 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		}
 	}
 
-	class BrightnessListener implements OnSeekBarChangeListener {
+	class BrightnessListener implements OnValueChangeListener {
 
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) {
+        @Override
+        public void onValueChange(NumberPicker picker, int
+            oldVal, int newVal) {
 			if (colour == null) return;
-			if (!fromUser) return;
-
-			Float brightness = ((float)progress)/100.0f;
-			System.out.println(brightness.toString());
+			Float brightness = ((float)newVal)/100.0f;
+			System.out.println("A:" + String.valueOf(brightness)
+					+ " " +String.valueOf(newVal));
 			colour = LFXHSBKColor.getColor(
 					colour.getHue(),
 					colour.getSaturation(),
 					brightness,
 					colour.getKelvin());
-			System.out.println(colour.toString());
 			light.setColor(colour);		
 		}
 
-		@Override
-		public void onStartTrackingTouch(SeekBar arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onStopTrackingTouch(SeekBar arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		
 	}
 
-	class TemperatureListener implements OnSeekBarChangeListener {
+	class TemperatureListener implements OnValueChangeListener {
 
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) {
+        @Override
+        public void onValueChange(NumberPicker picker, int
+            oldVal, int newVal) {
 			if (colour == null) return;
-			if (!fromUser) return;
 	
 			colour = LFXHSBKColor.getColor(
 					colour.getHue(),
 					colour.getSaturation(),
 					colour.getBrightness(),
-					progress);
+					newVal * tempStep + tempMin);
 			light.setColor(colour);					
-		}
-
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-			
 		}
 		
 	}
@@ -171,21 +160,25 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 	public void lightDidChangeColor( LFXLight light, LFXHSBKColor color)
 	{
 		colour = color;
+		float brightness = color.getBrightness();
 		
 		TextView text= (TextView) rootView.findViewById(R.id.light_colour);
 		text.setText(
-			String.format("%.2f %.2f %d%% %d", 
+			String.format("%.2f %.2f %.2f %d", 
 					color.getHue(),
 					color.getSaturation(),
-					(int)(color.getBrightness() * 100),
+					brightness,
 					color.getKelvin())
 		);
 		
-		SeekBar seekbar;
-		seekbar = (SeekBar) rootView.findViewById(R.id.brightness);
-		seekbar.setProgress((int)(color.getBrightness()*100));
-		seekbar = (SeekBar) rootView.findViewById(R.id.temperature);
-		seekbar.setProgress(color.getKelvin());
+		NumberPicker numberPicker;
+		numberPicker = (NumberPicker) rootView.findViewById(R.id.brightness);
+		int value = (int)(brightness*100+0.1);
+		System.out.println("B:" + String.valueOf(brightness*100)
+					+ " " +String.valueOf(value));
+		numberPicker.setValue(value);
+		numberPicker = (NumberPicker) rootView.findViewById(R.id.temperature);
+		numberPicker.setValue(color.getKelvin()/tempStep - tempMin);
 	}
 
 	@Override
