@@ -91,11 +91,7 @@ implements LFXLightListener, LFXLightCollectionListener, LFXNetworkContextListen
 		super.onCreate(savedInstanceState);
 
 		FragmentActivity activity = getActivity();
-
-		lightListAdapter = new LightArrayAdapter(activity);
 		
-		setListAdapter(lightListAdapter);
-
 		// A Multicast lock should be acquired, as some phones disable UDP broadcast / recieve
 //		WifiManager wifi;
 //      	wifi = (WifiManager) activity.getSystemService( Context.WIFI_SERVICE);
@@ -106,7 +102,12 @@ implements LFXLightListener, LFXLightCollectionListener, LFXNetworkContextListen
 		networkContext = LFXClient.getSharedInstance(appContext).getLocalNetworkContext();
 		networkContext.connect();
 		networkContext.addNetworkContextListener(this);
-		networkContext.getAllLightsCollection().addLightCollectionListener(this);
+
+		LFXLightCollection collection = networkContext.getAllLightsCollection();
+		collection.addLightCollectionListener(this);
+		
+		lightListAdapter = new LightArrayAdapter(activity, collection.getLights());
+		setListAdapter(lightListAdapter);
 	}
 
 	@Override
