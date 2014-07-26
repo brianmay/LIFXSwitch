@@ -103,11 +103,16 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
 			if (colour == null) return;
+			if (!fromUser) return;
+
+			Float brightness = ((float)progress)/100.0f;
+			System.out.println(brightness.toString());
 			colour = LFXHSBKColor.getColor(
 					colour.getHue(),
 					colour.getSaturation(),
-					((float)progress)/100,
+					brightness,
 					colour.getKelvin());
+			System.out.println(colour.toString());
 			light.setColor(colour);		
 		}
 
@@ -131,6 +136,8 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
 			if (colour == null) return;
+			if (!fromUser) return;
+	
 			colour = LFXHSBKColor.getColor(
 					colour.getHue(),
 					colour.getSaturation(),
@@ -167,10 +174,11 @@ public class LightDetailFragment extends Fragment implements LFXLightListener {
 		
 		TextView text= (TextView) rootView.findViewById(R.id.light_colour);
 		text.setText(
-			String.valueOf(color.getHue()) + "\n" +
-			String.valueOf(color.getSaturation()) + "\n" +
-			String.valueOf(color.getBrightness()) + "\n" +
-			String.valueOf(color.getKelvin())
+			String.format("%.2f %.2f %d%% %d", 
+					color.getHue(),
+					color.getSaturation(),
+					(int)(color.getBrightness() * 100),
+					color.getKelvin())
 		);
 		
 		SeekBar seekbar;
