@@ -29,7 +29,7 @@ Still need to decide which of these are in scope for this project.
 
 Copyright
 ---------
-Copyright 2007-2014 Brian May
+Copyright 2014 Brian May
 
 This file is part of LIFX Switch.
 
