@@ -20,8 +20,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
-//import android.net.wifi.WifiManager;
-//import android.net.wifi.WifiManager.MulticastLock;
 //import android.widget.Toast;
 
 /**
@@ -92,12 +90,6 @@ implements LFXLightListener, LFXLightCollectionListener, LFXNetworkContextListen
 
 		FragmentActivity activity = getActivity();
 		
-		// A Multicast lock should be acquired, as some phones disable UDP broadcast / recieve
-//		WifiManager wifi;
-//      	wifi = (WifiManager) activity.getSystemService( Context.WIFI_SERVICE);
-//      	ml = wifi.createMulticastLock( "lifx_switch");
-//      	ml.acquire();
-
 		Context appContext = activity.getApplicationContext();
 		networkContext = LFXClient.getSharedInstance(appContext).getLocalNetworkContext();
 		networkContext.connect();
