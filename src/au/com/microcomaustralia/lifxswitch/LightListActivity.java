@@ -4,6 +4,7 @@ import lifx.java.android.light.LFXLight;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.WindowManager;
 
 /**
  * An activity representing a list of Lights. This activity has different
@@ -32,6 +33,11 @@ public class LightListActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().addFlags(
+			WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+			WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+		);
+			
 		setContentView(R.layout.activity_light_list);
 
 		if (findViewById(R.id.light_detail_container) != null) {

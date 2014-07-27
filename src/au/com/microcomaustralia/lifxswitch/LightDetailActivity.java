@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 /**
  * An activity representing a single Light detail screen. This activity is only
@@ -19,6 +20,12 @@ public class LightDetailActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		getWindow().addFlags(
+				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+			);
+
 		setContentView(R.layout.activity_light_detail);
 
 		// Show the Up button in the action bar.
